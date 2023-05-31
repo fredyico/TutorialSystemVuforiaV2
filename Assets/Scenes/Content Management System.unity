@@ -844,6 +844,8 @@ MonoBehaviour:
   titleText: {fileID: 1796344900}
   tabText: {fileID: 1566180094}
   textContentText: {fileID: 1290067285}
+  previewImage: {fileID: 1223797218}
+  previewVideoPlayer: {fileID: 767506298}
 --- !u!1 &232141453
 GameObject:
   m_ObjectHideFlags: 0
@@ -889,7 +891,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -470, y: -29.437988}
+  m_AnchoredPosition: {x: -469.99994, y: -29.437988}
   m_SizeDelta: {x: -967.539, y: -96.255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &232141455
@@ -2118,10 +2120,10 @@ RectTransform:
   m_Father: {fileID: 1741672437}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.683, y: 0.33832252}
-  m_AnchorMax: {x: 0.683, y: 0.33832252}
-  m_AnchoredPosition: {x: -2, y: -8}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.70600003, y: 0.257}
+  m_AnchorMax: {x: 0.70600003, y: 0.257}
+  m_AnchoredPosition: {x: -2.449997, y: 3.5499878}
+  m_SizeDelta: {x: 422.795, y: 422.795}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!328 &767506298
 VideoPlayer:
@@ -2152,7 +2154,7 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 0
   m_WaitForFirstFrame: 1
@@ -2913,10 +2915,10 @@ RectTransform:
   m_Father: {fileID: 1741672437}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.10580036, y: 0.33832252}
-  m_AnchorMax: {x: 0.10580036, y: 0.33832252}
-  m_AnchoredPosition: {x: -9, y: -8}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0.22759895, y: 0.257}
+  m_AnchorMax: {x: 0.22759895, y: 0.257}
+  m_AnchoredPosition: {x: 10.410004, y: 2.0500183}
+  m_SizeDelta: {x: 417.794, y: 417.79}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1223797218
 MonoBehaviour:
@@ -3530,8 +3532,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.71625644}
   m_AnchorMax: {x: 0, y: 0.71625644}
-  m_AnchoredPosition: {x: 112, y: 1.4669952}
-  m_SizeDelta: {x: 164.83, y: 87.065}
+  m_AnchoredPosition: {x: 455.48, y: -40.36}
+  m_SizeDelta: {x: 851.8, y: 301.655}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1290067285
 MonoBehaviour:
@@ -4158,7 +4160,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1648765817}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 212497117}
+        m_TargetAssemblyTypeName: TutorialEditorManager, Assembly-CSharp
+        m_MethodName: OnImageButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &1648765817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4468,7 +4482,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1741372943}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 212497117}
+        m_TargetAssemblyTypeName: TutorialEditorManager, Assembly-CSharp
+        m_MethodName: OnVideoButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 1
 --- !u!114 &1741372943
 MonoBehaviour:
   m_ObjectHideFlags: 0
