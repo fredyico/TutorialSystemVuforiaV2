@@ -21,11 +21,9 @@ public class TutorialEditorManager : MonoBehaviour
     private string imagePath;
     private string videoPath;
 
-
     // Raw Image and Video Player Objects from Preview Tutorial Panel
     public RawImage previewImage;
     public VideoPlayer previewVideoPlayer;
-
 
     public TutorialManager tutorialManager; //object to access the list of PageData
     private int currentPageIndex = 0; //variable to track the current page
@@ -35,7 +33,7 @@ public class TutorialEditorManager : MonoBehaviour
         tabInputField.onValueChanged.AddListener(OnTabChanged);
         textContentInputField.onValueChanged.AddListener(OnTextContentChanged);
     }
-
+    //buttons method
     public void OnTitleChanged(string newValue)
     {
         titleText.text = newValue;
@@ -56,7 +54,6 @@ public class TutorialEditorManager : MonoBehaviour
     {
         StartCoroutine(ShowLoadVideoDialogCoroutine());
     }
-
     private IEnumerator ShowLoadImageDialogCoroutine()
     {
         // Show a load file dialog and wait for a response from user
@@ -92,6 +89,45 @@ public class TutorialEditorManager : MonoBehaviour
             previewVideoPlayer.Play();
         }
     }
+    //load tutorial dialog box
+    private IEnumerator ShowLoadTutorialDialogCoroutine()
+    {
+        yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.Files, false, null, "Load Tutorial", "Load");
+
+        // FileBrowser.Success returns true when a file/folder is picked
+        // If so, output the file/folder path
+        if (FileBrowser.Success)
+        {
+            string filePath = FileBrowser.Result[0];
+
+            // Load the JSON string from the file
+            string jsonData = File.ReadAllText(filePath);
+            PageDataList pageDataList = JsonUtility.FromJson<PageDataList>(jsonData);
+            tutorialManager.Pages = pageDataList.Pages;
+
+            // Load the first page
+            currentPageIndex = 0;
+            LoadPageData();
+        }
+    }
+    //save tutorial dialog box
+    private IEnumerator ShowSaveTutorialDialogCoroutine()
+    {
+        yield return FileBrowser.WaitForSaveDialog(FileBrowser.PickMode.Files, false, null, "Save Tutorial", "Save");
+
+        // FileBrowser.Success returns true when a file/folder is picked
+        // If so, output the file/folder path
+        if (FileBrowser.Success)
+        {
+            string filePath = FileBrowser.Result[0];
+
+            PageDataList pageDataList = new PageDataList();
+            pageDataList.Pages = tutorialManager.Pages;
+
+            string jsonData = JsonUtility.ToJson(pageDataList);
+            File.WriteAllText(filePath, jsonData);
+        }
+    }
     public void OnSavePageButtonPressed()
     {
         PageData currentPageData = new PageData
@@ -106,7 +142,6 @@ public class TutorialEditorManager : MonoBehaviour
         tutorialManager.Pages.Add(currentPageData);
         Debug.Log(currentPageData); Debug.Log("the page is being saved" + currentPageData);
     }
-
     //method to access the next page of the tutorial's list. It will check if it is the last page.
     public void OnNextPageButtonPressed()
     {
@@ -116,7 +151,6 @@ public class TutorialEditorManager : MonoBehaviour
             LoadPageData();
         }
     }
-
     public void OnPreviousPageButtonPressed()
     {
         if (currentPageIndex > 0)
@@ -138,7 +172,6 @@ public class TutorialEditorManager : MonoBehaviour
             previewImage.texture = tex;
         }
     }
-
     private void LoadVideoFromPath(string videoPath)
     {
         if (File.Exists(videoPath))
@@ -149,7 +182,6 @@ public class TutorialEditorManager : MonoBehaviour
             previewVideoPlayer.Play();            
         }
     }
-
     private void LoadPageData()
     {
         // Get the current page data
@@ -163,5 +195,20 @@ public class TutorialEditorManager : MonoBehaviour
         // TODO: Load image and video from their paths
         LoadImageFromPath(currentPageData.imagePath);
         LoadVideoFromPath(currentPageData.videoPath);
+    }
+
+    //load tutorial button
+    public void OnLoadTutorialButtonPressed()
+    {
+        // Show a load file dialog and wait for a response from user
+        // Load file/folder: FileBrowser.ShowLoadDialog( OnSuccess, OnCancel )
+        StartCoroutine(ShowLoadTutorialDialogCoroutine());
+    }
+
+    public void OnSaveTutorialButtonPressed()
+    {
+        // Show a save file dialog and wait for a response from user
+        // Load file/folder: FileBrowser.ShowSaveDialog( OnSuccess, OnCancel )
+        StartCoroutine(ShowSaveTutorialDialogCoroutine());
     }
 }
