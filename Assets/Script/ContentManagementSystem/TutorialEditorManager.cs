@@ -18,11 +18,17 @@ public class TutorialEditorManager : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI tabText;
     public TextMeshProUGUI textContentText;
+    private string imagePath;
+    private string videoPath;
+
 
     // Raw Image and Video Player Objects from Preview Tutorial Panel
     public RawImage previewImage;
     public VideoPlayer previewVideoPlayer;
 
+
+    public TutorialManager tutorialManager; //object to access the list of PageData
+    private int currentPageIndex = 0; //variable to track the current page
     void Start()
     {
         titleInputField.onValueChanged.AddListener(OnTitleChanged);
@@ -61,10 +67,10 @@ public class TutorialEditorManager : MonoBehaviour
         // If so, output the file/folder path
         if (FileBrowser.Success)
         {
-            string filePath = FileBrowser.Result[0];
+            imagePath = FileBrowser.Result[0];  // Store the selected image path
 
             // Load the image into a texture
-            byte[] imageBytes = File.ReadAllBytes(filePath);
+            byte[] imageBytes = File.ReadAllBytes(imagePath);
             Texture2D tex = new Texture2D(2, 2);
             tex.LoadImage(imageBytes);
 
@@ -78,12 +84,84 @@ public class TutorialEditorManager : MonoBehaviour
 
         if (FileBrowser.Success)
         {
-            string filePath = FileBrowser.Result[0];
+            videoPath = FileBrowser.Result[0];  // Store the selected video path
 
             // Load the video from the file path
-            previewVideoPlayer.url = filePath;
+            previewVideoPlayer.url = videoPath;
             previewVideoPlayer.Prepare();
             previewVideoPlayer.Play();
         }
+    }
+    public void OnSavePageButtonPressed()
+    {
+        PageData currentPageData = new PageData
+        {
+            title = titleInputField.text,
+            tab = tabInputField.text,
+            textContent = textContentInputField.text,
+            imagePath = imagePath,    // Set these fields when an image or video is selected
+            videoPath = videoPath     // Set these fields when an image or video is selected
+        };
+
+        tutorialManager.Pages.Add(currentPageData);
+        Debug.Log(currentPageData); Debug.Log("the page is being saved" + currentPageData);
+    }
+
+    //method to access the next page of the tutorial's list. It will check if it is the last page.
+    public void OnNextPageButtonPressed()
+    {
+        if (currentPageIndex < tutorialManager.Pages.Count - 1)
+        {
+            currentPageIndex++;
+            LoadPageData();
+        }
+    }
+
+    public void OnPreviousPageButtonPressed()
+    {
+        if (currentPageIndex > 0)
+        {
+            currentPageIndex--;
+            LoadPageData();
+        }
+    }
+    private void LoadImageFromPath(string imagePath)
+    {
+        if (File.Exists(imagePath))
+        {
+            // Load the image into a texture
+            byte[] imageBytes = File.ReadAllBytes(imagePath);
+            Texture2D tex = new Texture2D(2, 2);
+            tex.LoadImage(imageBytes);
+
+            // Apply the texture to the preview image
+            previewImage.texture = tex;
+        }
+    }
+
+    private void LoadVideoFromPath(string videoPath)
+    {
+        if (File.Exists(videoPath))
+        {       
+            // Load the video from the file path
+            previewVideoPlayer.url = videoPath;
+            previewVideoPlayer.Prepare();
+            previewVideoPlayer.Play();            
+        }
+    }
+
+    private void LoadPageData()
+    {
+        // Get the current page data
+        PageData currentPageData = tutorialManager.Pages[currentPageIndex];
+
+        // Update the UI elements
+        titleInputField.text = currentPageData.title;
+        tabInputField.text = currentPageData.tab;
+        textContentInputField.text = currentPageData.textContent;
+
+        // TODO: Load image and video from their paths
+        LoadImageFromPath(currentPageData.imagePath);
+        LoadVideoFromPath(currentPageData.videoPath);
     }
 }

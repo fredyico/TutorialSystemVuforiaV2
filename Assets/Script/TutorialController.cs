@@ -6,20 +6,11 @@ using UnityEngine.Video;
 using UnityEngine.Networking;
 using System.Collections;
 
-[System.Serializable]
-public class Page
-{
-    public string title;
-    public string tab;
-    public string textContent;
-    public string imagePath;
-    public string videoPath;
-}
 
 [System.Serializable]
 public class TutorialData
 {
-    public Page[] pages;
+    public PageData[] pages;
 }
 
 public class TutorialController : MonoBehaviour
@@ -75,7 +66,7 @@ public class TutorialController : MonoBehaviour
 
     private void LoadPage(int pageIndex)
     {
-        Page page = tutorialData.pages[pageIndex];
+        PageData page = tutorialData.pages[pageIndex];
         title.text = page.title;
         tab.text = page.tab;
         textContent.text = page.textContent;
