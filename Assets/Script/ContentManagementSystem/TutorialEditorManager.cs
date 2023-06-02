@@ -18,6 +18,7 @@ public class TutorialEditorManager : MonoBehaviour
     public TextMeshProUGUI titleText;
     public TextMeshProUGUI tabText;
     public TextMeshProUGUI textContentText;
+    public GameObject videoPlayerObject;
     private string imagePath;
     private string videoPath;
 
@@ -53,6 +54,42 @@ public class TutorialEditorManager : MonoBehaviour
     public void OnVideoButtonPressed()
     {
         StartCoroutine(ShowLoadVideoDialogCoroutine());
+    }
+    public void OnDeletePageButtonPressed()
+    {
+        if (tutorialManager.Pages.Count > 0)
+        {
+            tutorialManager.Pages.RemoveAt(currentPageIndex);
+
+            // If the current page index is greater than the last index in the Pages list, decrease it by one
+            if (currentPageIndex >= tutorialManager.Pages.Count)
+            {
+                currentPageIndex--;
+            }
+
+            // If there are any pages left, load the current page
+            if (tutorialManager.Pages.Count > 0)
+            {
+                LoadPageData();
+            }
+            else // If no pages left, clear the fields
+            {
+                ClearFields();
+            }
+        }
+    }
+    private void ClearFields()
+    {
+        titleInputField.text = "";
+        tabInputField.text = "";
+        textContentInputField.text = "";
+        previewImage.texture = null;
+        previewVideoPlayer.url = "";
+        // Make sure to stop the video player if it was playing a video
+        if (previewVideoPlayer.isPlaying)
+        {
+            previewVideoPlayer.Stop();
+        }
     }
     private IEnumerator ShowLoadImageDialogCoroutine()
     {
@@ -149,6 +186,10 @@ public class TutorialEditorManager : MonoBehaviour
         {
             currentPageIndex++;
             LoadPageData();
+            if (previewVideoPlayer.isPlaying)
+            {
+                previewVideoPlayer.Stop();
+            }
         }
     }
     public void OnPreviousPageButtonPressed()
@@ -157,6 +198,10 @@ public class TutorialEditorManager : MonoBehaviour
         {
             currentPageIndex--;
             LoadPageData();
+            if (previewVideoPlayer.isPlaying)
+            {
+                previewVideoPlayer.Stop();
+            }
         }
     }
     private void LoadImageFromPath(string imagePath)
@@ -192,9 +237,19 @@ public class TutorialEditorManager : MonoBehaviour
         tabInputField.text = currentPageData.tab;
         textContentInputField.text = currentPageData.textContent;
 
-        // TODO: Load image and video from their paths
+        // Load image and video from their paths
         LoadImageFromPath(currentPageData.imagePath);
-        LoadVideoFromPath(currentPageData.videoPath);
+        if (string.IsNullOrEmpty(currentPageData.videoPath) || !File.Exists(currentPageData.videoPath))
+        {
+            // If the current page does not have a video, reset the VideoPlayer and disable the RawImage
+            previewVideoPlayer.clip = null;
+            videoPlayerObject.SetActive(false);
+        }
+        else
+        {
+            videoPlayerObject.SetActive(true);
+            LoadVideoFromPath(currentPageData.videoPath);
+        }
     }
 
     //load tutorial button
