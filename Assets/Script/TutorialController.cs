@@ -15,6 +15,8 @@ public class TutorialController : MonoBehaviour
     public VideoPlayer videoPlayer;
     public GameObject qrCode; // The QR code object
 
+
+
     private PageDataList tutorialData; // Updated from TutorialData to PageDataList
     private int currentPageIndex = 0;
 
@@ -24,7 +26,7 @@ public class TutorialController : MonoBehaviour
 
     private IEnumerator Start()
     {
-        string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "casamento e cachorro.json");
+        string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "tutorialData.json");
         UnityWebRequest request = UnityWebRequest.Get(jsonFilePath);
         yield return request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
@@ -93,6 +95,10 @@ public class TutorialController : MonoBehaviour
         {
             currentPageIndex++;
             LoadPage(currentPageIndex);
+            if (videoPlayer.isPlaying)
+            {
+                videoPlayer.Stop();
+            }
         }
     }
 
@@ -102,11 +108,19 @@ public class TutorialController : MonoBehaviour
         {
             currentPageIndex--;
             LoadPage(currentPageIndex);
+            if (videoPlayer.isPlaying)
+            {
+                videoPlayer.Stop();
+            }
         }        
     }
     public void QuitTutorial(Button3D button)
     {   
         Application.Quit();
             Debug.Log("Quit Application");
+        if (videoPlayer.isPlaying)
+        {
+            videoPlayer.Stop();
+        }
     }
 }
