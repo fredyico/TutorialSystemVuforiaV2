@@ -6,32 +6,34 @@ using UnityEngine.Video;
 using UnityEngine.Networking;
 using System.Collections;
 
-
-[System.Serializable]
-public class TutorialData
-{
-    public PageData[] pages;
-}
-
 public class TutorialController : MonoBehaviour
 {
+    /*
     public TMP_Text title;
     public TMP_Text tab;
     public TMP_Text textContent;
     public RawImage image;
     public VideoPlayer videoPlayer;
-    private TutorialData tutorialData;
+    public GameObject dialogBox;
+    public GameObject qrCode; // The QR code object
+    */
+
+    public Transform dialogBox;  // The 3D dialog box
+    public TextMeshPro title;
+    public TextMeshPro tab;
+    public TextMeshPro textContent;
+    public Renderer image;  // The Renderer component of a Plane/Sphere/etc. to show the image
+    public VideoPlayer videoPlayer;
+    public GameObject qrCode; // The QR code object
+
+    private PageDataList tutorialData; // Updated from TutorialData to PageDataList
     private int currentPageIndex = 0;
 
-    /*
-    private void Start()
-    {
-        string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "tutorialData.json");
-        string jsonString = File.ReadAllText(jsonFilePath);
-        tutorialData = JsonUtility.FromJson<TutorialData>(jsonString);
-        LoadPage(currentPageIndex);
-    }
-    */
+
+    public Button3D nextPageButton;
+    public Button3D previousPageButton;
+
+
 
     private IEnumerator Start()
     {
@@ -45,11 +47,14 @@ public class TutorialController : MonoBehaviour
         else
         {
             string jsonString = request.downloadHandler.text;
-            tutorialData = JsonUtility.FromJson<TutorialData>(jsonString);
+            Debug.Log("JSON String: " + jsonString); // Add this line to log the JSON string.
+            tutorialData = JsonUtility.FromJson<PageDataList>(jsonString); // Updated from TutorialData to PageDataList
             LoadPage(currentPageIndex);
         }
+        nextPageButton.OnClick += NextPage;
+        previousPageButton.OnClick += PreviousPage;
     }
-    private IEnumerator LoadImage(string imagePath, RawImage outputImage)
+    private IEnumerator LoadImage(string imagePath, Renderer outputImage)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(imagePath);
         yield return request.SendWebRequest();
@@ -59,32 +64,53 @@ public class TutorialController : MonoBehaviour
         }
         else
         {
-            outputImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture;
+            outputImage.material.mainTexture = ((DownloadHandlerTexture)request.downloadHandler).texture;
         }
     }
 
-
     private void LoadPage(int pageIndex)
     {
-        PageData page = tutorialData.pages[pageIndex];
-        title.text = page.title;
-        tab.text = page.tab;
-        textContent.text = page.textContent;
+        if (pageIndex >= 0 && pageIndex < tutorialData.Pages.Count)
+        {
+            PageData page = tutorialData.Pages[pageIndex]; // Updated from tutorialData.pages to tutorialData.Pages
+            title.text = page.title;
+            tab.text = page.tab;
+            textContent.text = page.textContent;
 
-        string imagePath = Path.Combine(Application.streamingAssetsPath, page.imagePath);
-        StartCoroutine(LoadImage(imagePath, image));
+            string imagePath = Path.Combine(Application.streamingAssetsPath, page.imagePath);
+            StartCoroutine(LoadImage(imagePath, image));
+
+            // Load video from video path
+            if (!string.IsNullOrEmpty(page.videoPath))
+            {
+                string videoPath = Path.Combine(Application.streamingAssetsPath, page.videoPath);
+                videoPlayer.url = videoPath;
+                videoPlayer.Prepare();
+            }
+            //videoPlayer.url = Path.Combine(Application.streamingAssetsPath, page.videoPath);
+            //videoPlayer.Prepare();
+            //videoPlayer.Play();
+
+            // Apply the positional offset
+            Vector3 basePosition = qrCode.transform.position; // get QR code position here
+            dialogBox.transform.position = basePosition + new Vector3(page.positionalOffset.xOffset, page.positionalOffset.yOffset, page.positionalOffset.zOffset);
+        }
+        else
+        {
+            Debug.LogError("Invalid page index: " + pageIndex);
+        }
     }
 
-    public void NextPage()
+    public void NextPage(Button3D button)
     {
-        if (currentPageIndex < tutorialData.pages.Length - 1)
+        if (currentPageIndex < tutorialData.Pages.Count - 1) // Updated from tutorialData.pages.Length to tutorialData.Pages.Count
         {
             currentPageIndex++;
             LoadPage(currentPageIndex);
         }
     }
 
-    public void PreviousPage()
+    public void PreviousPage(Button3D button)
     {
         if (currentPageIndex > 0)
         {
@@ -92,12 +118,8 @@ public class TutorialController : MonoBehaviour
             LoadPage(currentPageIndex);
         }
     }
-
-    // TODO: Add function for quit button
     public void QuitTutorial()
     {
-        // Whatever you want to do when quit is clicked. To close the application:
         Application.Quit();
     }
 }
-

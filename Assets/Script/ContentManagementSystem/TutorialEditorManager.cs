@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -28,6 +27,10 @@ public class TutorialEditorManager : MonoBehaviour
 
     public TutorialManager tutorialManager; //object to access the list of PageData
     private int currentPageIndex = 0; //variable to track the current page
+
+    public GameObject qrCode;
+    public GameObject dialogBox;
+
     void Start()
     {
         titleInputField.onValueChanged.AddListener(OnTitleChanged);
@@ -250,6 +253,10 @@ public class TutorialEditorManager : MonoBehaviour
             videoPlayerObject.SetActive(true);
             LoadVideoFromPath(currentPageData.videoPath);
         }
+
+        // Apply the positional offset
+        Vector3 basePosition = qrCode.transform.position;
+        dialogBox.transform.position = basePosition + new Vector3(currentPageData.positionalOffset.xOffset, currentPageData.positionalOffset.yOffset, currentPageData.positionalOffset.zOffset);
     }
 
     //load tutorial button
@@ -266,4 +273,17 @@ public class TutorialEditorManager : MonoBehaviour
         // Load file/folder: FileBrowser.ShowSaveDialog( OnSuccess, OnCancel )
         StartCoroutine(ShowSaveTutorialDialogCoroutine());
     }
+
+    public void LoadTutorial(string filePath)
+    {
+        string jsonData = File.ReadAllText(filePath);
+        PageDataList pageDataList = JsonUtility.FromJson<PageDataList>(jsonData);
+
+        tutorialManager.Pages = pageDataList.Pages;
+
+        // Load the first page
+        currentPageIndex = 0;
+        LoadPageData();
+    }
+
 }

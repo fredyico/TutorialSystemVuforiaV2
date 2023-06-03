@@ -1,39 +1,39 @@
 {
-  "pages": [
+  "Pages": [
     {
       "title": "Page 1",
       "tab": "Step 1",
       "textContent": "Gather the Following Tools and Materials: \n1. Spare Tire \n2. Jack/Lever \n3. Lug Wrench \n4. Vehicle Owner's Manual \n5. Wheel Wedges or Bricks",
       "imagePath": "Images/Step1.png",
-      "videoPath": "Path/to/your/video1"
+      "videoPath": ""
     },
     {
       "title": "Page 2",
       "tab": "Step 2",
       "textContent": "Ensure that you are in a safe location away from traffic. Park Your vehicle on a flat surface and engage the parking brake",
       "imagePath": "Images/Step2.png",
-      "videoPath": "Path/to/your/video1"
+      "videoPath": ""
     },
     {
       "title": "Page 3",
       "tab": "Step 3",
       "textContent": "Locate the spate tire and tools. \n Retrieve the spare tire, jack, and lug wrench from your vehicle. The owner's manual will guide you to their specific locations, as they can vary depending on the vehicle model.",
       "imagePath": "Images/Step3.png",
-      "videoPath": "Path/to/your/video1"
+      "videoPath": ""
     },
     {
       "title": "Page 4",
       "tab": "Step 4",
       "textContent": "Loosen the lug nuts.\n Using the lug wrench, turn the lug nuts counterclockwise to loosen them. Loosen them only; do not remote them completely at this stage.",
       "imagePath": "Images/Step4.png",
-      "videoPath": "Path/to/your/video1"
+      "videoPath": ""
     },
     {
       "title": "Page 5",
       "tab": "Step 5",
       "textContent": "Position the Jack. \n Refer to your owner's manual to identify the recommended jacking points on your vehicle. Place the jack in the appropriate position, ensuring that it makes contact with a sturdy part of the vehicle.",
       "imagePath": "Images/Step5.png",
-      "videoPath": "Path/to/your/video1"
+      "videoPath": ""
     }
   ]
 }

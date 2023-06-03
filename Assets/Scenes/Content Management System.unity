@@ -592,6 +592,9 @@ MonoBehaviour:
   previewImage: {fileID: 1223797218}
   previewVideoPlayer: {fileID: 767506298}
   tutorialManager: {fileID: 212497118}
+  qrCode: {fileID: 1811084686608592237, guid: 952100e3fb1c6344db4f4f0c46eeb5c1, type: 3}
+  dialogBox: {fileID: 8524940999576751247, guid: 11f4171da3aa80b41aeab3f017f249c8,
+    type: 3}
 --- !u!114 &212497118
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -649,7 +652,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -469.99994, y: -29.437988}
+  m_AnchoredPosition: {x: -470, y: -29.437988}
   m_SizeDelta: {x: -967.539, y: -96.255}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &232141455
