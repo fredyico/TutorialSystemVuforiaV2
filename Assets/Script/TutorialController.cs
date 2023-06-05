@@ -19,6 +19,7 @@ public class TutorialController : MonoBehaviour
 
     private PageDataList tutorialData; // Updated from TutorialData to PageDataList
     private int currentPageIndex = 0;
+    public string tutorialFileName = ""+".json";
 
     public Button3D nextPageButton;
     public Button3D previousPageButton;
@@ -26,7 +27,7 @@ public class TutorialController : MonoBehaviour
 
     private IEnumerator Start()
     {
-        string jsonFilePath = Path.Combine(Application.streamingAssetsPath, "tutorialData.json");
+        string jsonFilePath = Path.Combine(Application.streamingAssetsPath, tutorialFileName);
         UnityWebRequest request = UnityWebRequest.Get(jsonFilePath);
         yield return request.SendWebRequest();
         if (request.result != UnityWebRequest.Result.Success)
